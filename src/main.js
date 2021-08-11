@@ -4,6 +4,9 @@ import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
 
+// setting plugins
+import "./plugins/vue-tailwind-plugin";
+
 Vue.config.productionTip = false;
 
 new Vue({
