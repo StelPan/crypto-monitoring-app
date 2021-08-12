@@ -70,7 +70,9 @@
               </svg>
             </button>
           </div>
-          <div class="flex items-center flex-shrink-0 text-white">Мониторинг валюты</div>
+          <div class="flex items-center flex-shrink-0 text-white">
+            Мониторинг валюты
+          </div>
           <div class="hidden sm:ml-6 sm:flex sm:items-center">
             <a
               href="#"
@@ -113,7 +115,8 @@
             rounded-md
             focus:outline-none focus:text-white focus:bg-blue-700
           "
-          >Валюты</a>
+          >Валюты</a
+        >
       </div>
     </div>
   </t-dropdown>

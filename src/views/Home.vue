@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="px-4">
-        <FormAdd @toggle="add"/>
+        <FormAdd @toggle="add" />
       </div>
     </div>
   </div>
@@ -23,7 +23,7 @@ export default {
     },
   },
   mounted() {
-    console.log(apiMethods.destroyTickers)
+    console.log(apiMethods.destroyTickers);
   },
 };
 </script>
