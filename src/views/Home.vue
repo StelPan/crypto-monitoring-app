@@ -10,6 +10,7 @@
 
 <script>
 import FormAdd from "@/components/FormAdd";
+import * as apiMethods from "@/api";
 
 export default {
   name: "Home",
@@ -20,6 +21,9 @@ export default {
     add(tickerName) {
       alert(tickerName);
     },
+  },
+  mounted() {
+    console.log(apiMethods.destroyTickers)
   },
 };
 </script>

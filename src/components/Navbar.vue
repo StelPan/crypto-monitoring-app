@@ -70,7 +70,7 @@
               </svg>
             </button>
           </div>
-          <div class="flex items-center flex-shrink-0 text-white">Cryptonomicon</div>
+          <div class="flex items-center flex-shrink-0 text-white">Мониторинг валюты</div>
           <div class="hidden sm:ml-6 sm:flex sm:items-center">
             <a
               href="#"
@@ -88,45 +88,7 @@
                 rounded-md
                 focus:outline-none focus:text-white focus:bg-blue-700
               "
-              >Users</a
-            >
-            <a
-              href="#"
-              class="
-                px-3
-                py-2
-                ml-4
-                text-sm
-                font-medium
-                leading-5
-                text-blue-300
-                transition
-                duration-150
-                ease-in-out
-                rounded-md
-                hover:text-white hover:bg-blue-700
-                focus:outline-none focus:text-white focus:bg-blue-700
-              "
-              >Companies</a
-            >
-            <a
-              href="#"
-              class="
-                px-3
-                py-2
-                ml-4
-                text-sm
-                font-medium
-                leading-5
-                text-blue-300
-                transition
-                duration-150
-                ease-in-out
-                rounded-md
-                hover:text-white hover:bg-blue-700
-                focus:outline-none focus:text-white focus:bg-blue-700
-              "
-              >Settings</a
+              >Валюты</a
             >
           </div>
         </div>
@@ -151,46 +113,7 @@
             rounded-md
             focus:outline-none focus:text-white focus:bg-blue-700
           "
-          >Users</a
-        >
-        <a
-          href="#"
-          class="
-            block
-            px-3
-            py-2
-            mt-1
-            text-base
-            font-medium
-            text-blue-300
-            transition
-            duration-150
-            ease-in-out
-            rounded-md
-            hover:text-white hover:bg-blue-700
-            focus:outline-none focus:text-white focus:bg-blue-700
-          "
-          >Companies</a
-        >
-        <a
-          href="#"
-          class="
-            block
-            px-3
-            py-2
-            mt-1
-            text-base
-            font-medium
-            text-blue-300
-            transition
-            duration-150
-            ease-in-out
-            rounded-md
-            hover:text-white hover:bg-blue-700
-            focus:outline-none focus:text-white focus:bg-blue-700
-          "
-          >Settings</a
-        >
+          >Валюты</a>
       </div>
     </div>
   </t-dropdown>

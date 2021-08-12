@@ -1,8 +1,10 @@
 <template>
   <div class="ticker-add-form">
-    <label for="ticker-name">Название тикера</label>
-    <t-input id="ticker-name" v-model="tickerName"></t-input>
-    <t-button @click="toggle">Добавить</t-button>
+    <div class="ticker-group-input">
+      <label for="ticker-name">Название тикера</label>
+      <t-input id="ticker-name" class="mt-2" v-model="tickerName"></t-input>
+    </div>
+    <t-button class="mt-2" @click="toggle">Добавить</t-button>
   </div>
 </template>
 
@@ -12,7 +14,7 @@ export default {
   data() {
     return {
       tickerName: "",
-    }
+    };
   },
   methods: {
     toggle() {
@@ -20,7 +22,8 @@ export default {
 
       try {
         vm.validate();
-        this.$emit('toggle', vm.tickerName);
+        vm.$emit("toggle", vm.tickerName);
+        vm.tickerName = "";
       } catch (e) {
         alert(e.message);
       }
