@@ -1,13 +1,18 @@
 <template>
   <div>
     <div class="container px-4">
-      <div class="grid grid-cols-3 mt-3">
-        <FormAdd @toggle="subscribeTicker"/>
+      <div class="grid grid-cols-2 mt-3">
+        <FormAdd @toggle="subscribeTicker" />
       </div>
-      <hr class="mt-3 mb-3"/>
+      <hr class="mt-3 mb-3" />
       <!-- Ticker container block. -->
-      <div class="flex flex-reverse justify-between">
-        <Ticker v-for="n in 3" :key="n" :ticker-info="{ name: 'BTC' }" />
+      <div class="grid grid-cols-3 gap-4">
+        <Ticker
+          v-for="(ticker, i) in tickers"
+          :key="i"
+          @destroy="unsubscribeTicker"
+          :ticker-data="{ name: ticker, key: i }"
+        />
       </div>
     </div>
   </div>
@@ -16,10 +21,19 @@
 <script>
 import FormAdd from "@/components/FormAdd";
 import Ticker from "@/components/Ticker";
-import { subscribeTickers, unsubscribeTickers } from "@/api";
+import {
+  subscribeTickers,
+  unsubscribeTickers,
+  getTickersInStorage,
+} from "@/api";
 
 export default {
   name: "Home",
+  data() {
+    return {
+      tickers: [],
+    };
+  },
   components: {
     FormAdd,
     Ticker,
@@ -27,12 +41,15 @@ export default {
   methods: {
     async subscribeTicker(tickerName) {
       await subscribeTickers(tickerName);
+      this.tickers = getTickersInStorage();
     },
     async unsubscribeTicker(tickerName) {
       await unsubscribeTickers(tickerName);
+      this.tickers = getTickersInStorage();
     },
   },
-  async mounted() {
+  mounted() {
+    this.tickers = getTickersInStorage();
   },
 };
 </script>

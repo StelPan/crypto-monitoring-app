@@ -5,6 +5,8 @@ const storageKeyName = "crypto-monitoring";
 
 // const axios = window.axios ? window.axios : undefined;
 
+// const cryptoData = [];
+
 /**
  * Получает все тикеты из хранилища localStorage
  *
@@ -32,9 +34,9 @@ const saveTickersDataInStorage = (tickersData) => {
  * @param tickerName
  */
 const addTicker = (tickerName) => {
-  saveTickersDataInStorage(
-      getTickersInStorage().push(tickerName)
-  );
+  const tickers = getTickersInStorage();
+  tickers.push(tickerName);
+  saveTickersDataInStorage(tickers);
 };
 
 /**
@@ -52,7 +54,7 @@ const removeTicker = (tickerName) => {
  * @param tickerName
  * @returns {Promise<void>}
  */
-const subscribeTickers = async (tickerName) => {
+const subscribeTickers = (tickerName) => {
   addTicker(tickerName);
 };
 
@@ -61,8 +63,8 @@ const subscribeTickers = async (tickerName) => {
  *
  * @returns {Promise<void>}
  */
-const unsubscribeTickers = async () => {
-  removeTicker();
+const unsubscribeTickers = async (tickerName) => {
+  removeTicker(tickerName);
 };
 
 export { subscribeTickers, unsubscribeTickers, getTickersInStorage };
