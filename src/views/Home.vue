@@ -1,8 +1,13 @@
 <template>
   <div>
-    <div class="container">
-      <div class="px-4">
-        <FormAdd @toggle="add" />
+    <div class="container px-4">
+      <div class="grid grid-cols-3 mt-3">
+        <FormAdd @toggle="subscribeTicker"/>
+      </div>
+      <hr class="mt-3 mb-3"/>
+      <!-- Ticker container block. -->
+      <div class="flex flex-reverse justify-between">
+        <Ticker v-for="n in 3" :key="n" :ticker-info="{ name: 'BTC' }" />
       </div>
     </div>
   </div>
@@ -10,20 +15,24 @@
 
 <script>
 import FormAdd from "@/components/FormAdd";
-import * as apiMethods from "@/api";
+import Ticker from "@/components/Ticker";
+import { subscribeTickers, unsubscribeTickers } from "@/api";
 
 export default {
   name: "Home",
   components: {
     FormAdd,
+    Ticker,
   },
   methods: {
-    add(tickerName) {
-      alert(tickerName);
+    async subscribeTicker(tickerName) {
+      await subscribeTickers(tickerName);
+    },
+    async unsubscribeTicker(tickerName) {
+      await unsubscribeTickers(tickerName);
     },
   },
-  mounted() {
-    console.log(apiMethods.destroyTickers);
+  async mounted() {
   },
 };
 </script>
