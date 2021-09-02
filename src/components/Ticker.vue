@@ -1,6 +1,8 @@
 <template>
   <t-card :header="'USD / ' + tickerData.name">
-    <div class="flex justify-center px-4">1.0003$</div>
+    <div class="flex justify-center px-4">
+      {{ tickerData.price }}
+    </div>
     <template v-slot:footer>
       <div class="flex justify-center">
         <t-button @click="destroy">
@@ -22,7 +24,7 @@ export default {
   },
   methods: {
     destroy() {
-      this.$emit("destroy", this.tickerData.name);
+      this.$emit("destroy", this.tickerData);
     },
   },
 };

@@ -1,17 +1,18 @@
 <template>
   <div>
     <div class="container px-4">
+      <!-- Form container block. -->
       <div class="grid grid-cols-2 mt-3">
-        <FormAdd @toggle="subscribeTicker" />
+        <FormAdd @toggle="additional" />
       </div>
-      <hr class="mt-3 mb-3" />
+      <hr v-if="tickers.length" class="mt-3 mb-3" />
       <!-- Ticker container block. -->
       <div class="grid grid-cols-3 gap-4">
         <Ticker
           v-for="(ticker, i) in tickers"
           :key="i"
-          @destroy="unsubscribeTicker"
-          :ticker-data="{ name: ticker, key: i }"
+          @destroy="remove"
+          :ticker-data="ticker"
         />
       </div>
     </div>
@@ -21,11 +22,7 @@
 <script>
 import FormAdd from "@/components/FormAdd";
 import Ticker from "@/components/Ticker";
-import {
-  subscribeTickers,
-  unsubscribeTickers,
-  getTickersInStorage,
-} from "@/api";
+import { subscribeTickers, unsubscribeTickers } from "@/api";
 
 export default {
   name: "Home",
@@ -39,17 +36,33 @@ export default {
     Ticker,
   },
   methods: {
-    async subscribeTicker(tickerName) {
-      await subscribeTickers(tickerName);
-      this.tickers = getTickersInStorage();
+    additional(tickerName) {
+      let newObjectTicker = {
+        name: tickerName,
+        price: "Обновление...",
+      };
+
+      this.tickers = [...this.tickers, newObjectTicker];
+      subscribeTickers(newObjectTicker.name, (newPrice) =>
+        this.updateTicker(newObjectTicker.name, newPrice)
+      );
     },
-    async unsubscribeTicker(tickerName) {
-      await unsubscribeTickers(tickerName);
-      this.tickers = getTickersInStorage();
+    remove(ticker) {
+      this.tickers = this.tickers.filter((t) => t !== ticker);
+
+      if (this.selectedTicker === ticker) {
+        this.selectedTicker = null;
+      }
+
+      unsubscribeTickers(ticker);
     },
-  },
-  mounted() {
-    this.tickers = getTickersInStorage();
+    updateTicker(tickerName, price) {
+      this.tickers
+        .filter((ticker) => ticker.name === tickerName)
+        .forEach((ticker) => {
+          ticker.price = price;
+        });
+    },
   },
 };
 </script>

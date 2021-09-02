@@ -1,70 +1,75 @@
-//const cryptoCompareApiKey =
-//  "ac46ad52677000cb3e028837fe082e332c4479d5d2bf24232df895c38a24746d";
+const cryptoCompareApiKey =
+  "ac46ad52677000cb3e028837fe082e332c4479d5d2bf24232df895c38a24746d";
 
-const storageKeyName = "crypto-monitoring";
+// const storageKeyName = "crypto-monitoring";
 
-// const axios = window.axios ? window.axios : undefined;
+const tickersHandlers = new Map(); // {}
+const socket = new WebSocket(
+  `wss://streamer.cryptocompare.com/v2?api_key=${cryptoCompareApiKey}`
+);
 
-// const cryptoData = [];
+const AGGREGATE_INDEX = "5";
+const INVALID_SUB_INDEX = "500";
 
-/**
- * Получает все тикеты из хранилища localStorage
- *
- * @returns array
- */
-const getTickersInStorage = () => {
-  const tickers = localStorage.getItem(storageKeyName);
-  return tickers ? JSON.parse(tickers) : [];
-};
-
-/**
- *
- * @param tickersData
- */
-const saveTickersDataInStorage = (tickersData) => {
-  if (typeof tickersData !== "string") {
-    tickersData = JSON.stringify(tickersData);
+socket.addEventListener("message", (e) => {
+  const {
+    TYPE: type,
+    FROMSYMBOL: currency,
+    PRICE: newPrice,
+  } = JSON.parse(e.data);
+  if (type !== AGGREGATE_INDEX || newPrice === undefined) {
+    return;
   }
 
-  localStorage.setItem(storageKeyName, tickersData);
-};
+  if (type === INVALID_SUB_INDEX) {
+    // TODO: Logical on error code
+    return;
+  }
 
-/**
- *
- * @param tickerName
- */
-const addTicker = (tickerName) => {
-  const tickers = getTickersInStorage();
-  tickers.push(tickerName);
-  saveTickersDataInStorage(tickers);
-};
+  const handlers = tickersHandlers.get(currency) ?? [];
+  handlers.forEach((fn) => fn(newPrice));
+});
 
-/**
- *
- * @param tickerName
- */
-const removeTicker = (tickerName) => {
-  saveTickersDataInStorage(
-    getTickersInStorage().filter((ticker) => ticker !== tickerName)
+function sendToWebSocket(message) {
+  const stringifiedMessage = JSON.stringify(message);
+
+  if (socket.readyState === WebSocket.OPEN) {
+    socket.send(stringifiedMessage);
+    return;
+  }
+
+  socket.addEventListener(
+    "open",
+    () => {
+      socket.send(stringifiedMessage);
+    },
+    { once: true }
   );
+}
+
+function subscribeToTickerOnWs(ticker) {
+  sendToWebSocket({
+    action: "SubAdd",
+    subs: [`5~CCCAGG~${ticker}~USD`],
+  });
+}
+
+function unsubscribeFromTickerOnWs(ticker) {
+  sendToWebSocket({
+    action: "SubRemove",
+    subs: [`5~CCCAGG~${ticker}~USD`],
+  });
+}
+
+const subscribeTickers = (ticker, cb) => {
+  const subscribers = tickersHandlers.get(ticker) || [];
+  tickersHandlers.set(ticker, [...subscribers, cb]);
+  subscribeToTickerOnWs(ticker);
 };
 
-/**
- *
- * @param tickerName
- * @returns {Promise<void>}
- */
-const subscribeTickers = (tickerName) => {
-  addTicker(tickerName);
+const unsubscribeTickers = (ticker) => {
+  tickersHandlers.delete(ticker);
+  unsubscribeFromTickerOnWs(ticker);
 };
 
-/**
- * Отписывается от ранее добавленных криптовалют
- *
- * @returns {Promise<void>}
- */
-const unsubscribeTickers = async (tickerName) => {
-  removeTicker(tickerName);
-};
-
-export { subscribeTickers, unsubscribeTickers, getTickersInStorage };
+export { subscribeTickers, unsubscribeTickers };
