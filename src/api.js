@@ -3,7 +3,8 @@ const cryptoCompareApiKey =
 
 // const storageKeyName = "crypto-monitoring";
 
-const tickersHandlers = new Map(); // {}
+const tickersHandlers = new Map();
+
 const socket = new WebSocket(
   `wss://streamer.cryptocompare.com/v2?api_key=${cryptoCompareApiKey}`
 );
@@ -31,17 +32,17 @@ socket.addEventListener("message", (e) => {
 });
 
 function sendToWebSocket(message) {
-  const stringifiedMessage = JSON.stringify(message);
+  const stringifyMessage = JSON.stringify(message);
 
   if (socket.readyState === WebSocket.OPEN) {
-    socket.send(stringifiedMessage);
+    socket.send(stringifyMessage);
     return;
   }
 
   socket.addEventListener(
     "open",
     () => {
-      socket.send(stringifiedMessage);
+      socket.send(stringifyMessage);
     },
     { once: true }
   );
@@ -61,12 +62,21 @@ function unsubscribeFromTickerOnWs(ticker) {
   });
 }
 
+/**
+ *
+ * @param ticker
+ * @param cb
+ */
 const subscribeTickers = (ticker, cb) => {
   const subscribers = tickersHandlers.get(ticker) || [];
   tickersHandlers.set(ticker, [...subscribers, cb]);
   subscribeToTickerOnWs(ticker);
 };
 
+/**
+ *
+ * @param ticker
+ */
 const unsubscribeTickers = (ticker) => {
   tickersHandlers.delete(ticker);
   unsubscribeFromTickerOnWs(ticker);

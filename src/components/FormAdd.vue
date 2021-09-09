@@ -2,7 +2,14 @@
   <div class="ticker-add-form">
     <div class="ticker-group-input">
       <label for="ticker-name">Название тикера</label>
-      <t-input id="ticker-name" class="mt-2" v-model="tickerName" placeholder="Например: DOGE"></t-input>
+      <t-input
+        @keydown.enter="toggle"
+        id="ticker-name"
+        ref="tickerName"
+        class="mt-2"
+        v-model.trim="tickerName"
+        placeholder="Например: DOGE"
+      />
     </div>
     <t-button class="mt-2" @click="toggle">Добавить</t-button>
   </div>
@@ -22,8 +29,10 @@ export default {
         return;
       }
 
-      this.$emit("toggle", this.tickerName);
+      let formattedTickerName = this.tickerName.toUpperCase();
+      this.$emit("toggle", formattedTickerName);
       this.tickerName = "";
+      this.$refs.tickerName.focus();
     },
   },
 };
