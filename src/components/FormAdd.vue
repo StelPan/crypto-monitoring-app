@@ -29,8 +29,7 @@ export default {
         return;
       }
 
-      let formattedTickerName = this.tickerName.toUpperCase();
-      this.$emit("toggle", formattedTickerName);
+      this.$emit("toggle", this.tickerName.toUpperCase());
       this.tickerName = "";
       this.$refs.tickerName.focus();
     },

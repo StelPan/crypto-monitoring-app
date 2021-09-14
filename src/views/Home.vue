@@ -1,12 +1,10 @@
 <template>
   <div>
     <div class="container px-4">
-      <!-- Form container block. -->
       <div class="grid grid-cols-2 mt-3">
         <FormAdd @toggle="additional" />
       </div>
       <hr v-if="tickers.length" class="mt-3 mb-3" />
-      <!-- Ticker container block. -->
       <div class="grid grid-cols-3 gap-4">
         <Ticker
           v-for="(ticker, i) in tickers"
@@ -16,19 +14,22 @@
           :ticker-data="ticker"
         />
       </div>
-      <div
-        v-if="selectedTicker"
-        class="mt-5 flex justify-center font-extrabold"
-      >
-        <div class="h-40 flex items-end w-full justify-end" ref="graph">
-          <div
-            v-for="(h, idx) in normalizedGraph"
-            :key="idx"
-            :style="{ height: `${h}%`}"
-            class="mx-1 bg-blue-500 w-4"
-          />
+      <template v-if="selectedTicker">
+        <hr v-if="tickers.length" class="mt-3 mb-3" />
+        <h2 class="fs-5 text-xl font-semibold text-blue-900">
+          График изменения курса валюты - {{ selectedTicker.name }}
+        </h2>
+        <div class="mt-5 flex justify-center font-extrabold">
+          <div class="h-40 flex items-end w-full justify-end" ref="graph">
+            <div
+              v-for="(h, idx) in normalizedGraph"
+              :key="idx"
+              :style="{ height: `${h}%` }"
+              class="mx-1 bg-blue-500 w-4"
+            />
+          </div>
         </div>
-      </div>
+      </template>
     </div>
   </div>
 </template>
@@ -118,6 +119,6 @@ export default {
       this.graphLines = [];
       this.$nextTick().then(this.calculateMaxGraphElements);
     },
-  }
+  },
 };
 </script>
